@@ -1,0 +1,140 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
+    <!--
+      This jelly script is used for per-build configuration.
+
+      See global.jelly for a general discussion about jelly script.
+    -->
+    <f:section title="${%title}">
+
+
+        <f:optionalBlock name="easyqa.pluginEnabled" title="${%integrate}"
+                         checked="${instance.pluginEnabled}">
+            <j:choose>
+                <j:when test="${descriptor.sites.size() &gt; 0}">
+                    <f:entry title="${%site}" field="site">
+                        <select class="setting-input" name="easyqa.siteName">
+                            <j:forEach var="s" items="${descriptor.sites}">
+                                <f:option selected="${s.name==instance.siteName}">${s.name}</f:option>
+                            </j:forEach>
+                        </select>
+                    </f:entry>
+
+                    <f:entry title="${%Failure Mode}" field="failureMode">
+                        <label>
+                            <f:radio name="easyqa.failureMode" value="NONE"
+                                     checked="${instance.failureMode==null || instance.failureMode=='NONE'}" />
+                            ${%NONE}
+                        </label>
+                        <label>
+                            <f:radio name="easyqa.failureMode" value="UNSTABLE"
+                                     checked="${instance.failureMode=='UNSTABLE'}" />
+                            ${%UNSTABLE}
+                        </label>
+                        <label>
+                            <f:radio name="easyqa.failureMode" value="FAILURE"
+                                     checked="${instance.failureMode=='FAILURE'}" />
+                            ${%FAILURE}
+                        </label>
+
+                    </f:entry>
+
+
+                    <f:entry field="annotationsEnabled">
+                        <label>
+                            <f:checkbox name="easyqa.annotationsEnabled"/>
+                            ${%annotateChangeLog}
+                        </label>
+
+                    </f:entry>
+
+                    <f:block>
+                        <strong>${%backlinks}</strong>
+                    </f:block>
+
+                    <f:entry title="${%backlinks.enabled}" field="commentsEnabled">
+                        <f:checkbox name="easyqa.commentsEnabled"/>
+                    </f:entry>
+
+                    <f:entry title="${%backlinks.commentText}" field="commentTextSecure">
+                        <f:property field="commentTextSecure"/>
+                    </f:entry>
+
+                    <f:entry title="${%backlinks.visibility}" field="linkVisibility">
+                        <f:textbox name="easyqa.linkVisibility"/>
+                    </f:entry>
+
+                    <f:entry title="${%backlinks.silent}" field="silentLinks">
+                        <f:checkbox name="easyqa.silentLinks"/>
+                    </f:entry>
+
+                    <f:block>
+                        <strong>${%execute_commands}</strong>
+                    </f:block>
+                    <f:entry title="${%execute_commands.enabled}" field="commandsEnabled">
+                        <f:checkbox name="easyqa.commandsEnabled"/>
+                    </f:entry>
+
+                    <f:entry title="${%execute_commands.run_as}" field="runAsEnabled">
+                        <f:checkbox name="easyqa.runAsEnabled"/>
+                    </f:entry>
+
+                    <f:entry title="${%execute_commands.silent}" field="silentCommands">
+                        <f:checkbox name="easyqa.silentCommands"/>
+                    </f:entry>
+
+                    <f:entry title="${%execute_commands.trackCommits}" field="trackCommits">
+                        <f:checkbox name="easyqa.trackCommits"/>
+                    </f:entry>
+
+                    <f:entry title="${%execute_commands.project_limits}" field="executeProjectLimits">
+                        <f:textbox autoCompleteDelimChar="," name="easyqa.executeProjectLimits"/>
+                    </f:entry>
+
+                    <f:block>
+                        <strong>${%prefix_commands}</strong>
+                        <p>
+                            ${%prefix_commands.summary}
+                        </p>
+                        <f:repeatableProperty field="prefixCommandPairs"  minimum="0" />
+                    </f:block>
+
+                    <f:block>
+                        <strong>${%build_updater}</strong>
+                    </f:block>
+
+                    <f:entry title="${%build_updater.field}" field="stateFieldName">
+                        <f:textbox name="easyqa.stateFieldName"/>
+                    </f:entry>
+
+                    <f:entry title="${%build_updater.fixed_states}" field="fixedValues">
+                        <f:textbox autoCompleteDelimChar="," name="easyqa.fixedValues"/>
+                    </f:entry>
+
+                    <f:block>
+                        <strong>${%testlinker.title}</strong>
+                        <p>
+                            ${%testlinker.summary}
+                        </p>
+                    </f:block>
+
+                    <f:entry title="${%testlinker.project}" field="project">
+                        <f:textbox name="easyqa.project"/>
+                    </f:entry>
+
+
+
+
+                </j:when>
+                <j:when test="${descriptor.sites.size() eq 0}">
+                    <f:entry>
+                        <p>${%nosites}</p>
+                        <a href="${rootURL}/configure#easyqa">${%nosites.configure_link}</a>
+                    </f:entry>
+                </j:when>
+            </j:choose>
+        </f:optionalBlock>
+
+    </f:section>
+</j:jelly>

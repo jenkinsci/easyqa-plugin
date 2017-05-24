@@ -1,0 +1,37 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
+         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+    <f:section title="${%header}">
+        <f:entry title="EasyQA projects" description="${%description}">
+            <a name="easyqa" />
+            <f:repeatable name="easyqasites" var="site" items="${descriptor.sites}">
+                <table width="100%">
+
+                    <f:entry title="${%url}" field="url">
+                        <f:textbox name="easyqa.url" value="${site.url}" />
+                    </f:entry>
+                    <f:entry title="${%token}" field="token">
+                        <f:textbox name="easyqa.token" value="${site.token}"/>
+                    </f:entry>
+                    <f:entry title="${%email}" field="email">
+                        <f:textbox name="easyqa.email" value="${site.email}"/>
+                    </f:entry>
+                    <f:entry title="${%password}" field="password">
+                        <f:password name="easyqa.password" value="${site.password}"/>
+                    </f:entry>
+                    <f:entry title="">
+                        <div align="right">
+                            <f:validateButton title="${%testConnection}" progress="${%testing}"
+                                              method="testConnection" with="easyqa.url,easyqa.token,easyqa.email,easyqa.password" />
+                        </div>
+                    </f:entry>
+                    <f:entry title="">
+                        <div align="right">
+                            <f:repeatableDeleteButton/>
+                        </div>
+                    </f:entry>
+                </table>
+            </f:repeatable>
+        </f:entry>
+    </f:section>
+</j:jelly>
