@@ -113,6 +113,15 @@
       <artifactId>script-security</artifactId>
       <version>1.27</version>
     </dependency>
+      <dependency>
+          <groupId>org.jenkins-ci</groupId>
+          <artifactId>test-annotations</artifactId>
+      </dependency>
+      <dependency>
+          <groupId>org.jenkins-ci.main</groupId>
+          <artifactId>jenkins-core</artifactId>
+          <version>1.625.3</version>
+      </dependency>
 
   </dependencies>
 

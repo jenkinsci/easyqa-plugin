@@ -9,12 +9,12 @@
     <f:section title="${%title}">
 
 
-        <f:optionalBlock name="easyqa.pluginEnabled" title="${%integrate}"
+        <f:optionalBlock name="EasyQA.pluginEnabled" title="${%integrate}"
                          checked="${instance.pluginEnabled}">
             <j:choose>
                 <j:when test="${descriptor.sites.size() &gt; 0}">
                     <f:entry title="${%site}" field="site">
-                        <select class="setting-input" name="easyqa.siteName">
+                        <select class="setting-input" name="EasyQA.siteName">
                             <j:forEach var="s" items="${descriptor.sites}">
                                 <f:option selected="${s.name==instance.siteName}">${s.name}</f:option>
                             </j:forEach>
@@ -23,17 +23,17 @@
 
                     <f:entry title="${%Failure Mode}" field="failureMode">
                         <label>
-                            <f:radio name="easyqa.failureMode" value="NONE"
+                            <f:radio name="EasyQA.failureMode" value="NONE"
                                      checked="${instance.failureMode==null || instance.failureMode=='NONE'}" />
                             ${%NONE}
                         </label>
                         <label>
-                            <f:radio name="easyqa.failureMode" value="UNSTABLE"
+                            <f:radio name="EasyQA.failureMode" value="UNSTABLE"
                                      checked="${instance.failureMode=='UNSTABLE'}" />
                             ${%UNSTABLE}
                         </label>
                         <label>
-                            <f:radio name="easyqa.failureMode" value="FAILURE"
+                            <f:radio name="EasyQA.failureMode" value="FAILURE"
                                      checked="${instance.failureMode=='FAILURE'}" />
                             ${%FAILURE}
                         </label>
@@ -43,7 +43,7 @@
 
                     <f:entry field="annotationsEnabled">
                         <label>
-                            <f:checkbox name="easyqa.annotationsEnabled"/>
+                            <f:checkbox name="EasyQA.annotationsEnabled"/>
                             ${%annotateChangeLog}
                         </label>
 
@@ -54,7 +54,7 @@
                     </f:block>
 
                     <f:entry title="${%backlinks.enabled}" field="commentsEnabled">
-                        <f:checkbox name="easyqa.commentsEnabled"/>
+                        <f:checkbox name="EasyQA.commentsEnabled"/>
                     </f:entry>
 
                     <f:entry title="${%backlinks.commentText}" field="commentTextSecure">
@@ -62,34 +62,34 @@
                     </f:entry>
 
                     <f:entry title="${%backlinks.visibility}" field="linkVisibility">
-                        <f:textbox name="easyqa.linkVisibility"/>
+                        <f:textbox name="EasyQA.linkVisibility"/>
                     </f:entry>
 
                     <f:entry title="${%backlinks.silent}" field="silentLinks">
-                        <f:checkbox name="easyqa.silentLinks"/>
+                        <f:checkbox name="EasyQA.silentLinks"/>
                     </f:entry>
 
                     <f:block>
                         <strong>${%execute_commands}</strong>
                     </f:block>
                     <f:entry title="${%execute_commands.enabled}" field="commandsEnabled">
-                        <f:checkbox name="easyqa.commandsEnabled"/>
+                        <f:checkbox name="EasyQA.commandsEnabled"/>
                     </f:entry>
 
                     <f:entry title="${%execute_commands.run_as}" field="runAsEnabled">
-                        <f:checkbox name="easyqa.runAsEnabled"/>
+                        <f:checkbox name="EasyQA.runAsEnabled"/>
                     </f:entry>
 
                     <f:entry title="${%execute_commands.silent}" field="silentCommands">
-                        <f:checkbox name="easyqa.silentCommands"/>
+                        <f:checkbox name="EasyQA.silentCommands"/>
                     </f:entry>
 
                     <f:entry title="${%execute_commands.trackCommits}" field="trackCommits">
-                        <f:checkbox name="easyqa.trackCommits"/>
+                        <f:checkbox name="EasyQA.trackCommits"/>
                     </f:entry>
 
                     <f:entry title="${%execute_commands.project_limits}" field="executeProjectLimits">
-                        <f:textbox autoCompleteDelimChar="," name="easyqa.executeProjectLimits"/>
+                        <f:textbox autoCompleteDelimChar="," name="EasyQA.executeProjectLimits"/>
                     </f:entry>
 
                     <f:block>
@@ -105,11 +105,11 @@
                     </f:block>
 
                     <f:entry title="${%build_updater.field}" field="stateFieldName">
-                        <f:textbox name="easyqa.stateFieldName"/>
+                        <f:textbox name="EasyQA.stateFieldName"/>
                     </f:entry>
 
                     <f:entry title="${%build_updater.fixed_states}" field="fixedValues">
-                        <f:textbox autoCompleteDelimChar="," name="easyqa.fixedValues"/>
+                        <f:textbox autoCompleteDelimChar="," name="EasyQA.fixedValues"/>
                     </f:entry>
 
                     <f:block>
@@ -120,7 +120,7 @@
                     </f:block>
 
                     <f:entry title="${%testlinker.project}" field="project">
-                        <f:textbox name="easyqa.project"/>
+                        <f:textbox name="EasyQA.project"/>
                     </f:entry>
 
 
@@ -130,7 +130,7 @@
                 <j:when test="${descriptor.sites.size() eq 0}">
                     <f:entry>
                         <p>${%nosites}</p>
-                        <a href="${rootURL}/configure#easyqa">${%nosites.configure_link}</a>
+                        <a href="${rootURL}/configure#EasyQA">${%nosites.configure_link}</a>
                     </f:entry>
                 </j:when>
             </j:choose>
