@@ -1,6 +1,9 @@
 package com.geteasyqa.EasyQA;
 
-import com.geteasyqa.EasyQA.Plugin.*;
+import com.geteasyqa.EasyQA.Plugin.EasyQABuildFailureMode;
+import com.geteasyqa.EasyQA.Plugin.EasyQAServer;
+import com.geteasyqa.EasyQA.Plugin.EasyQASite;
+import com.geteasyqa.EasyQA.Plugin.User;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.Job;
@@ -11,13 +14,9 @@ import hudson.util.FormValidation;
 import lombok.Getter;
 import lombok.Setter;
 import net.sf.json.JSONObject;
-import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by yanagusti on 5/25/17.
@@ -35,69 +34,7 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
      * If the YouTrack plugin is enabled.
      */
     @Getter @Setter private boolean pluginEnabled;
-    /**
-     * If ping back comments is enabled.
-     */
-    @Getter @Setter private boolean commentsEnabled;
-    /**
-     * The text to use for ping back comments
-     */
-    @Getter @Setter private String commentText;
-    /**
-     * The text to use for ping back comments
-     */
-    @Getter @Setter private SecureGroovyScript commentTextSecure;
-    /**
-     * If executing commands is enabled.
-     */
-    @Getter @Setter private boolean commandsEnabled;
-    /**
-     * If the commands should be run as the vcs user.
-     */
-    @Getter @Setter private boolean runAsEnabled;
 
-    /**
-     * If ChangeLog annotations is enabled.
-     */
-    @Getter @Setter private boolean annotationsEnabled;
-
-    /**
-     * The name of the group comment links should be visible for.
-     */
-    @Getter @Setter private String linkVisibility;
-    /**
-     * Name of state field to check for weather an issue is selected.
-     */
-    @Getter @Setter private String stateFieldName;
-    /**
-     * Comma-separated list of values that are seen as fixed.
-     */
-    @Getter @Setter private String fixedValues;
-    /**
-     * Execute commands silently, i.e. do not notify watchers.
-     */
-    @Getter @Setter private boolean silentCommands;
-
-    /**
-     * Execute link comment silently.
-     */
-    @Getter @Setter private boolean silentLinks;
-    /**
-     * Limits the projects commands are applied to.
-     */
-    @Getter @Setter private String executeProjectLimits;
-    /**
-     * Tracks the processed commits.
-     */
-    @Getter @Setter private boolean trackCommits;
-    /**
-     * This is the default project for the integration, used for creating issues.
-     */
-    @Getter @Setter private String project;
-    /**
-     * Mapping from prefix words to corresponding commands.
-     */
-    @Getter @Setter private List<PrefixCommandPair> prefixCommandPairs;
     /**
      * How the build should fail if we can't apply the commands
      */
@@ -108,25 +45,10 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
 
 
     @DataBoundConstructor
-    public EasyQAPluginProperties(String siteName, boolean pluginEnabled, boolean commentsEnabled, boolean commandsEnabled, boolean runAsEnabled, boolean annotationsEnabled, String linkVisibility, String stateFieldName, String fixedValues, boolean silentCommands, boolean silentLinks, String executeProjectLimits, boolean trackCommits, String project, String commentText, EasyQABuildFailureMode failureMode, SecureGroovyScript commentTextSecure) {
+    public EasyQAPluginProperties(String siteName, boolean pluginEnabled,  EasyQABuildFailureMode failureMode) {
         this.siteName = siteName;
         this.pluginEnabled = pluginEnabled;
-        this.commentsEnabled = commentsEnabled;
-        this.commandsEnabled = commandsEnabled;
-        this.runAsEnabled = runAsEnabled;
-        this.annotationsEnabled = annotationsEnabled;
-        this.linkVisibility = linkVisibility;
-        this.stateFieldName = stateFieldName;
-        this.fixedValues = fixedValues;
-        this.silentCommands = silentCommands;
-        this.silentLinks = silentLinks;
-        this.executeProjectLimits = executeProjectLimits;
-        this.trackCommits = trackCommits;
-        this.project = project;
-        this.commentText = commentText;
-        this.commentTextSecure = commentTextSecure;
         this.failureMode = failureMode;
-        this.prefixCommandPairs = new ArrayList<PrefixCommandPair>();
     }
 
 
@@ -140,9 +62,9 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
         this.pluginEnabled = pluginEnabled;
     }
 
-    public void setPrefixCommandPairs(List<PrefixCommandPair> prefixCommandPairs) {
-        this.prefixCommandPairs = prefixCommandPairs;
-    }
+//    public void setPrefixCommandPairs(List<PrefixCommandPair> prefixCommandPairs) {
+//        this.prefixCommandPairs = prefixCommandPairs;
+//    }
 
 
 
@@ -179,12 +101,12 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
                     return null;
                 }
 
-                ypp.commentTextSecure.configuringWithKeyItem();
+
 
                 ypp.setPluginEnabled(true);
-                Object prefixCommandArray = pluginEnabled.get("prefixCommandPairs");
-                List<PrefixCommandPair> commandPairs = req.bindJSONToList(PrefixCommandPair.class, prefixCommandArray);
-                ypp.setPrefixCommandPairs(commandPairs);
+
+
+
             }
 
 
@@ -247,21 +169,6 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
         }
         if (result != null) {
             result.setPluginEnabled(pluginEnabled);
-            result.setCommentEnabled(commentsEnabled);
-            result.setCommandsEnabled(commandsEnabled);
-            result.setAnnotationsEnabled(annotationsEnabled);
-            result.setRunAsEnabled(runAsEnabled);
-            result.setLinkVisibility(linkVisibility);
-            result.setStateFieldName(stateFieldName);
-            result.setFixedValues(fixedValues);
-            result.setSilentCommands(silentCommands);
-            result.setSilentLinks(silentLinks);
-            result.setExecuteProjectLimits(executeProjectLimits);
-            result.setTrackCommits(trackCommits);
-            result.setProject(project);
-            result.setPrefixCommandPairs(prefixCommandPairs);
-            result.setCommentText(commentText);
-            result.setCommentTextSecure(commentTextSecure);
             result.setFailureMode(failureMode);
         }
         return result;

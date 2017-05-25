@@ -61,9 +61,20 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
             return true;
         }
 
+        EasyQAServer server = getEasyQAServer(easyQASite);
+        User user = server.login(easyQASite.getToken(), easyQASite.getEmail(), easyQASite.getPassword());
+        if (user == null) {
+            listener.getLogger().println("Could not login user to EasyQA");
+            return true;
+        }
+
+        CreateIssue createIssue = new CreateIssue(easyQASite.getUrl());
+        createIssue.createIssue(easyQASite.getToken(), user.getAuth_token(), "test123");
+
+
         if (shouldCreateIssue(build)) {
-            EasyQAServer server = getEasyQAServer(easyQASite);
-            User user = server.login(easyQASite.getToken(), easyQASite.getEmail(), easyQASite.getPassword());
+            server = getEasyQAServer(easyQASite);
+            user = server.login(easyQASite.getToken(), easyQASite.getEmail(), easyQASite.getPassword());
             if (user == null) {
                 listener.getLogger().println("Could not login user to EasyQA");
                 return true;
@@ -88,7 +99,7 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
             if (attachBuildLog) {
                 buildLog = build.getLogFile();
             }
-            CreateIssue createIssue = new CreateIssue(easyQASite.getUrl());
+            createIssue = new CreateIssue(easyQASite.getUrl());
             ArrayList<File> files = new ArrayList<>();
             files.add(buildLog);
 
@@ -96,17 +107,8 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
             , files, "description", description);
 
             listener.getLogger().println("Created new YouTrack issue " + id);
-        }else {
-            EasyQAServer server = getEasyQAServer(easyQASite);
-            User user = server.login(easyQASite.getToken(), easyQASite.getEmail(), easyQASite.getPassword());
-            if (user == null) {
-                listener.getLogger().println("Could not login user to EasyQA");
-                return true;
-            }
-
-            CreateIssue createIssue = new CreateIssue(easyQASite.getUrl());
-            createIssue.createIssue(easyQASite.getToken(), user.getAuth_token(), "test123");
         }
+
 
         return true;
 

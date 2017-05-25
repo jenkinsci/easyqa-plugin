@@ -1,14 +1,10 @@
 package com.geteasyqa.EasyQA.Plugin;
 
 import com.geteasyqa.EasyQA.EasyQAPluginProperties;
-import com.geteasyqa.EasyQA.PrefixCommandPair;
 import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.Result;
-import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.kohsuke.stapler.DataBoundConstructor;
-
-import java.util.List;
 
 public class EasyQASite {
     private String name;
@@ -17,21 +13,6 @@ public class EasyQASite {
     private String password;
     private String token;
     private transient boolean pluginEnabled;
-    private transient boolean runAsEnabled;
-    private transient boolean commandsEnabled;
-    private transient boolean commentEnabled;
-    private transient String commentText;
-    private transient SecureGroovyScript commentTextSecure;
-    private transient boolean annotationsEnabled;
-    private transient String linkVisibility;
-    private transient String stateFieldName;
-    private transient String fixedValues;
-    private transient boolean silentCommands;
-    private transient boolean silentLinks;
-    private transient String project;
-    private transient String executeProjectLimits;
-    private transient List<PrefixCommandPair> prefixCommandPairs;
-    private boolean trackCommits;
     private EasyQABuildFailureMode failureMode;
 
 
@@ -96,74 +77,13 @@ public class EasyQASite {
         return token;
     }
 
-    public String getStateFieldName() {
-        return stateFieldName;
-    }
 
 
     public void setPluginEnabled(boolean pluginEnabled) {
         this.pluginEnabled = pluginEnabled;
     }
 
-    public void setCommentEnabled(boolean commentEnabled) {
-        this.commentEnabled = commentEnabled;
-    }
 
-    public void setCommandsEnabled(boolean commandsEnabled) {
-        this.commandsEnabled = commandsEnabled;
-    }
-
-    public void setAnnotationsEnabled(boolean annotationsEnabled) {
-        this.annotationsEnabled = annotationsEnabled;
-    }
-
-    public void setRunAsEnabled(boolean runAsEnabled) {
-        this.runAsEnabled = runAsEnabled;
-    }
-
-    public void setLinkVisibility(String linkVisibility) {
-        this.linkVisibility = linkVisibility;
-    }
-
-    public void setStateFieldName(String stateFieldName) {
-        this.stateFieldName = stateFieldName;
-    }
-
-    public void setFixedValues(String fixedValues) {
-        this.fixedValues = fixedValues;
-    }
-
-    public void setSilentCommands(boolean silentCommands) {
-        this.silentCommands = silentCommands;
-    }
-
-    public void setSilentLinks(boolean silentLinks) {
-        this.silentLinks = silentLinks;
-    }
-
-    public void setExecuteProjectLimits(String executeProjectLimits) {
-        this.executeProjectLimits = executeProjectLimits;
-    }
-
-    public void setTrackCommits(boolean trackCommits) {
-        this.trackCommits = trackCommits;
-    }
-
-    public void setProject(String project) {
-        this.project = project;
-    }
-
-    public void setPrefixCommandPairs(List<PrefixCommandPair> prefixCommandPairs) {
-        this.prefixCommandPairs = prefixCommandPairs;
-    }
-
-    public void setCommentText(String commentText) {
-        this.commentText = commentText;
-    }
-
-    public void setCommentTextSecure(SecureGroovyScript commentTextSecure) {
-        this.commentTextSecure = commentTextSecure;
-    }
 
     public void setFailureMode(EasyQABuildFailureMode failureMode) {
         this.failureMode = failureMode;

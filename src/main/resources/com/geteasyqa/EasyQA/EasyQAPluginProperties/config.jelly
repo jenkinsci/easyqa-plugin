@@ -41,87 +41,10 @@
                     </f:entry>
 
 
-                    <f:entry field="annotationsEnabled">
-                        <label>
-                            <f:checkbox name="EasyQA.annotationsEnabled"/>
-                            ${%annotateChangeLog}
-                        </label>
 
-                    </f:entry>
 
-                    <f:block>
-                        <strong>${%backlinks}</strong>
-                    </f:block>
 
-                    <f:entry title="${%backlinks.enabled}" field="commentsEnabled">
-                        <f:checkbox name="EasyQA.commentsEnabled"/>
-                    </f:entry>
 
-                    <f:entry title="${%backlinks.commentText}" field="commentTextSecure">
-                        <f:property field="commentTextSecure"/>
-                    </f:entry>
-
-                    <f:entry title="${%backlinks.visibility}" field="linkVisibility">
-                        <f:textbox name="EasyQA.linkVisibility"/>
-                    </f:entry>
-
-                    <f:entry title="${%backlinks.silent}" field="silentLinks">
-                        <f:checkbox name="EasyQA.silentLinks"/>
-                    </f:entry>
-
-                    <f:block>
-                        <strong>${%execute_commands}</strong>
-                    </f:block>
-                    <f:entry title="${%execute_commands.enabled}" field="commandsEnabled">
-                        <f:checkbox name="EasyQA.commandsEnabled"/>
-                    </f:entry>
-
-                    <f:entry title="${%execute_commands.run_as}" field="runAsEnabled">
-                        <f:checkbox name="EasyQA.runAsEnabled"/>
-                    </f:entry>
-
-                    <f:entry title="${%execute_commands.silent}" field="silentCommands">
-                        <f:checkbox name="EasyQA.silentCommands"/>
-                    </f:entry>
-
-                    <f:entry title="${%execute_commands.trackCommits}" field="trackCommits">
-                        <f:checkbox name="EasyQA.trackCommits"/>
-                    </f:entry>
-
-                    <f:entry title="${%execute_commands.project_limits}" field="executeProjectLimits">
-                        <f:textbox autoCompleteDelimChar="," name="EasyQA.executeProjectLimits"/>
-                    </f:entry>
-
-                    <f:block>
-                        <strong>${%prefix_commands}</strong>
-                        <p>
-                            ${%prefix_commands.summary}
-                        </p>
-                        <f:repeatableProperty field="prefixCommandPairs"  minimum="0" />
-                    </f:block>
-
-                    <f:block>
-                        <strong>${%build_updater}</strong>
-                    </f:block>
-
-                    <f:entry title="${%build_updater.field}" field="stateFieldName">
-                        <f:textbox name="EasyQA.stateFieldName"/>
-                    </f:entry>
-
-                    <f:entry title="${%build_updater.fixed_states}" field="fixedValues">
-                        <f:textbox autoCompleteDelimChar="," name="EasyQA.fixedValues"/>
-                    </f:entry>
-
-                    <f:block>
-                        <strong>${%testlinker.title}</strong>
-                        <p>
-                            ${%testlinker.summary}
-                        </p>
-                    </f:block>
-
-                    <f:entry title="${%testlinker.project}" field="project">
-                        <f:textbox name="EasyQA.project"/>
-                    </f:entry>
 
 
 
