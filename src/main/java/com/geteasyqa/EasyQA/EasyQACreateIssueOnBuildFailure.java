@@ -1,10 +1,8 @@
 package com.geteasyqa.EasyQA;
 
-import com.geteasyqa.EasyQA.Issues.CreateIssue;
 import com.geteasyqa.EasyQA.Plugin.EasyQAServer;
 import com.geteasyqa.EasyQA.Plugin.EasyQASite;
 import com.geteasyqa.EasyQA.Plugin.User;
-import hudson.EnvVars;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -15,14 +13,19 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.BuildStepMonitor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
-import hudson.util.FormValidation;
+import lombok.Getter;
+import lombok.Setter;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 /**
@@ -31,18 +34,16 @@ import java.util.ArrayList;
 public class EasyQACreateIssueOnBuildFailure extends Notifier {
     public static final String FAILURE = "failure";
     public static final String FAILUREORUNSTABL = "failureOrUnstable";
-
-    private String summary;
-    private String description;
+    @Getter
+    @Setter
     private String threshold;
-
+    @Getter
+    @Setter
     private boolean attachBuildLog;
 
     @DataBoundConstructor
-    public EasyQACreateIssueOnBuildFailure( String summary, String description, String threshold,  boolean attachBuildLog) {
+    public EasyQACreateIssueOnBuildFailure(String threshold, boolean attachBuildLog) {
 
-        this.summary = summary;
-        this.description = description;
         this.threshold = threshold;
 
         this.attachBuildLog = attachBuildLog;
@@ -61,15 +62,9 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
             return true;
         }
 
-        EasyQAServer server = getEasyQAServer(easyQASite);
-        User user = server.login(easyQASite.getToken(), easyQASite.getEmail(), easyQASite.getPassword());
-        if (user == null) {
-            listener.getLogger().println("Could not login user to EasyQA");
-            return true;
-        }
+        EasyQAServer server;
+        User user;
 
-        CreateIssue createIssue = new CreateIssue(easyQASite.getUrl());
-        createIssue.createIssue(easyQASite.getToken(), user.getAuth_token(), "test123");
 
 
         if (shouldCreateIssue(build)) {
@@ -80,43 +75,30 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
                 return true;
             }
 
-            EnvVars environment = build.getEnvironment(listener);
-            String title = environment.expand(this.summary);
-            String description = environment.expand(this.description);
-
-            if (title == null || "".equals(title)) {
-                title = "Build failure in build " + build.getNumber();
-            } else {
-                title = environment.expand(title);
-            }
-            if (description == null || "".equals(description)) {
-                description = getAbsoluteUrl(build);
-            } else {
-                description = environment.expand(description);
-            }
-
-            File buildLog = null;
+            String title = "Failure in build " + build.getNumber();
+            String description = "Build info\n: " + server.getErrorMessage(build.getLogInputStream());
             if (attachBuildLog) {
-                buildLog = build.getLogFile();
+
+                File buildLog = stringToFile(build, description);
+                listener.getLogger().println("Log file was created at " + buildLog.getAbsolutePath());
+                ArrayList<File> files = new ArrayList<>();
+                files.add(buildLog);
+                Integer id = server.createIssueWithAttachment(easyQASite.getToken(), user.getAuth_token(), title, description, files);
+
+                listener.getLogger().println("Created new EasyQA issue #" + id);
+
+            } else {
+                Integer id = server.createIssue(easyQASite.getToken(), user.getAuth_token(), title, description);
+
+                listener.getLogger().println("Created new EasyQA issue #" + id);
             }
-            createIssue = new CreateIssue(easyQASite.getUrl());
-            ArrayList<File> files = new ArrayList<>();
-            files.add(buildLog);
 
-            Integer id = createIssue.createIssueWithAttachments(easyQASite.getToken(), user.getAuth_token(), title
-            , files, "description", description);
-
-            listener.getLogger().println("Created new YouTrack issue " + id);
         }
-
-
         return true;
 
     }
 
-    public String getAbsoluteUrl(AbstractBuild<?, ?> build) {
-        return build.getAbsoluteUrl();
-    }
+
 
     public BuildStepMonitor getRequiredMonitorService() {
         return BuildStepMonitor.NONE;
@@ -140,6 +122,17 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
         return true;
     }
 
+    private File stringToFile(AbstractBuild<?, ?> build, String text) throws IOException {
+        File file = new File(build.getRootDir() + "/log1.txt");
+
+        Path targetPath = Paths.get(file.getAbsolutePath());
+        byte[] bytes = text.getBytes(StandardCharsets.UTF_8);
+        Files.write(targetPath, bytes, StandardOpenOption.CREATE);
+
+        return file;
+
+    }
+
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
@@ -150,7 +143,7 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
 
         @Override
         public String getDisplayName() {
-            return "test";
+            return "Create an issue on Build failure on EasyQA";
         }
 
 
@@ -160,13 +153,13 @@ public class EasyQACreateIssueOnBuildFailure extends Notifier {
         }
 
 
-        public FormValidation doCheckProject(@QueryParameter String value) {
-            return FormValidation.validateRequired(value);
+        @Override
+        public boolean configure(StaplerRequest req, JSONObject formData) {
+
+
+            save();
+            return true;
         }
-//
-//        public AutoCompletionCandidates doAutoCompleteProject(@AncestorInPath AbstractProject project, @QueryParameter String value) {
-//            return EasyQAPluginProperties.getProjects(project, value);
-//        }
 
     }
 }

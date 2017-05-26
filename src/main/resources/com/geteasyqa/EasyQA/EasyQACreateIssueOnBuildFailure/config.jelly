@@ -1,27 +1,17 @@
 <?jelly escape-by-default='true'?>
-<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout"
-         xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+<j:jelly xmlns:j="jelly:core"
+         xmlns:f="/lib/form">
 
-    <f:entry title="${%Build status}">
-       <label>
+    <f:entry title="${%Build_status}">
+        <label>
             <f:radio name="EasyQA.threshold" value="failure"
-                 checked="${instance.threshold==null || instance.threshold=='failure'}" />
-        ${%failure}
+                     checked="${instance.threshold==null || instance.threshold=='failure'}"/>
+            ${%failure}
         </label>
         <label>
             <f:radio name="EasyQA.threshold" value="failureOrUnstable"
-                 checked="${instance.threshold=='failureOrUnstable'}" />
-        ${%failure or unstable}
-        </label>
-    </f:entry>
-    <f:entry title="${%summary}" field="summary">
-        <label>
-            <f:textbox  />
-        </label>
-    </f:entry>
-    <f:entry title="${%description}" field="description">
-        <label>
-            <f:textarea  />
+                     checked="${instance.threshold=='failureOrUnstable'}"/>
+            ${%failure or unstable}
         </label>
     </f:entry>
 

@@ -22,7 +22,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class contains methods for communication with a YouTrack server using the REST API for version 4 of YouTrack.
+ * This class contains methods for communication with a EasyQA server using the REST API.
  */
 public class EasyQAServer {
 
@@ -35,7 +35,14 @@ public class EasyQAServer {
         this.serverUrl = serverUrl;
     }
 
-    private static String getErrorMessage(InputStream errorStream) throws IOException {
+    /**
+     * Getting an error message when a build is failed
+     *
+     * @param errorStream input stream while build fails
+     * @return String error message
+     */
+
+    public String getErrorMessage(InputStream errorStream) throws IOException {
         StringBuilder stringBuilder = new StringBuilder();
         try(BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(errorStream, StandardCharsets.UTF_8))) {
             String l;
@@ -57,13 +64,39 @@ public class EasyQAServer {
         return stringBuilder.toString();
     }
 
-    public Integer createIssue(String project_token, String auth_token, String title, String description, File attachment) throws IOException {
-        ArrayList<File> files = new ArrayList<>();
-        files.add(attachment);
+    /**
+     * Method for creating an issue without attachments on Issues page within your project in EasyQA
+     *
+     * @param project_token of your project in EasyQA. You can generate it on Integrations page
+     * @param auth_token    your authorization token in EasyQA
+     * @param title         a short description of your issue
+     * @param description   a description of your issue
+     * @return id of the created issue
+     * @throws IOException for incorrect parsing of the server response
+     */
+    public Integer createIssue(String project_token, String auth_token, String title, String description) throws IOException {
 
-        return new CreateIssue(serverUrl).createIssueWithAttachments(project_token, auth_token, title, files, "description", description);
+
+        return new CreateIssue(serverUrl).createIssue(project_token, auth_token, title, description);
     }
 
+
+    /**
+     * Method for creating an issue without attachments on Issues page within your project in EasyQA
+     *
+     * @param project_token of your project in EasyQA. You can generate it on Integrations page
+     * @param auth_token    your authorization token in EasyQA
+     * @param title         a short description of your issue
+     * @param description   a description of your issue
+     * @param files         a list of files for attachments
+     * @return id of the created issue
+     * @throws IOException for incorrect parsing of the server response
+     */
+    public Integer createIssueWithAttachment(String project_token, String auth_token, String title, String description, ArrayList<File> files) throws IOException {
+
+
+        return new CreateIssue(serverUrl).createIssueWithAttachments(project_token, auth_token, title, files, description);
+    }
 //    public List<Group> getGroups(User user) {
 //        List<Group> groups = new ArrayList<Group>();
 //        try {
@@ -419,6 +452,13 @@ public class EasyQAServer {
     }
 
 
+    /**
+     * Method for logging into EasyQA and generate auth_token
+     * @param project_token of your project in EasyQA. You can generate it on Integrations page
+     * @param email your registered email in EasyQA
+     * @param password your registered password in EasyQA
+     * @return User
+     */
     public User login(String project_token, String email, String password) {
 
         try {

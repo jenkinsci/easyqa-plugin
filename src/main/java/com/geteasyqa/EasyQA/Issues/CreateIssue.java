@@ -36,13 +36,15 @@ public class CreateIssue extends Initialization {
      * @return id of the created issue
      */
 
-    public Integer createIssue(String token, String auth_token, String summary, String... data) throws IOException, JSONException {
+    public Integer createIssue(String token, String auth_token, String summary, String description, String... data) throws IOException, JSONException {
 
         Map<String, RequestBody> model= new GetNotRequiredParameters().getIntoMap("text/plain", data);
 
         model.put("token", RequestBody.create(textType, token));
         model.put("auth_token", RequestBody.create(textType, auth_token));
         model.put("summary", RequestBody.create(textType, summary));
+        model.put("description", RequestBody.create(textType, description));
+
 
         Call<ResponseBody> call= easyqaUserAPI.uploadBugReport(model);
 
@@ -51,7 +53,7 @@ public class CreateIssue extends Initialization {
         System.out.println(result);
         if (result.startsWith("{")) {
             JSONObject jsonObj = new JSONObject(result);
-            id = jsonObj.getInt("id");
+            id = jsonObj.getInt("project_id");
         }else {
             System.out.println(result);
         }
@@ -70,13 +72,14 @@ public class CreateIssue extends Initialization {
      * @return id of the created issue
      */
 
-    public Integer createIssueWithAttachments(String token, String auth_token, String summary, ArrayList<File> files, String... data) throws IOException, JSONException {
+    public Integer createIssueWithAttachments(String token, String auth_token, String summary, ArrayList<File> files, String description, String... data) throws IOException, JSONException {
 
         Map<String, RequestBody> model= new GetNotRequiredParameters().getIntoMap("text/plain", data);
 
         model.put("token", RequestBody.create(textType, token));
         model.put("auth_token", RequestBody.create(textType, auth_token));
         model.put("summary", RequestBody.create(textType, summary));
+        model.put("description", RequestBody.create(textType, description));
 
         for (File file : files) {
             String fileName = file.getName();
@@ -91,7 +94,7 @@ public class CreateIssue extends Initialization {
         System.out.println(result);
         if (result.startsWith("{")) {
             JSONObject jsonObj = new JSONObject(result);
-            id = Integer.valueOf(jsonObj.getInt("id"));
+            id = Integer.valueOf(jsonObj.getInt("project_issue_number"));
             System.out.println("Create success! Issue id=" + id);
         }else {
             System.out.println(result);
@@ -132,7 +135,7 @@ public class CreateIssue extends Initialization {
         String result = bodyResponse.body().string();
         if (result.startsWith("{")) {
             JSONObject jsonObj = new JSONObject(result);
-            id = jsonObj.getInt("id");
+            id = jsonObj.getInt("project_issue_number");
         }else {
             System.out.println(result);
         }
@@ -185,7 +188,7 @@ public class CreateIssue extends Initialization {
 
         JSONObject jsonObj = new JSONObject(result);
         System.out.println(result);
-        id = jsonObj.getInt("id");
+        id = jsonObj.getInt("project_issue_number");
 
         return id;
 
