@@ -23,25 +23,22 @@ import org.kohsuke.stapler.StaplerRequest;
  */
 public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
 
+    @Extension
+    public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
     /**
      * The name of the site.
      */
     @Getter
     @Setter
     private String siteName;
-
     /**
-     * If the YouTrack plugin is enabled.
+     * If the EasyQA plugin is enabled.
      */
     @Getter @Setter private boolean pluginEnabled;
-
     /**
      * How the build should fail if we can't apply the commands
      */
     @Getter @Setter private EasyQABuildFailureMode failureMode = EasyQABuildFailureMode.NONE;
-
-    @Extension
-    public static final DescriptorImpl DESCRIPTOR = new DescriptorImpl();
 
 
     @DataBoundConstructor
@@ -66,15 +63,28 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
 //        this.prefixCommandPairs = prefixCommandPairs;
 //    }
 
+    public EasyQASite getSite() {
+        EasyQASite result = null;
+        EasyQASite[] sites = DESCRIPTOR.getSites();
+        if (siteName == null && sites.length > 0) {
+            result = sites[0];
+        }
 
+        for (EasyQASite site : sites) {
+            if (site.getName() != null && site.getName().equals(siteName)) {
+                result = site;
+                break;
+            }
+        }
+        if (result != null) {
+            result.setPluginEnabled(pluginEnabled);
+            result.setFailureMode(failureMode);
+        }
+        return result;
+    }
 
     public static final class DescriptorImpl extends JobPropertyDescriptor {
         private final CopyOnWriteList<EasyQASite> sites = new CopyOnWriteList();
-
-        @Override
-        public boolean isApplicable(Class<? extends Job> jobType) {
-            return AbstractProject.class.isAssignableFrom(jobType);
-        }
 
         public DescriptorImpl() {
             super(EasyQAPluginProperties.class);
@@ -82,12 +92,17 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
 
         }
 
-        public void setSites(EasyQASite site) {
-            sites.add(site);
+        @Override
+        public boolean isApplicable(Class<? extends Job> jobType) {
+            return AbstractProject.class.isAssignableFrom(jobType);
         }
 
         public EasyQASite[] getSites() {
             return sites.toArray(new EasyQASite[0]);
+        }
+
+        public void setSites(EasyQASite site) {
+            sites.add(site);
         }
 
         @Override
@@ -152,25 +167,5 @@ public class EasyQAPluginProperties extends JobProperty<AbstractProject<?, ?>> {
 
 
 
-    }
-
-    public EasyQASite getSite() {
-        EasyQASite result = null;
-        EasyQASite[] sites = DESCRIPTOR.getSites();
-        if (siteName == null && sites.length > 0) {
-            result = sites[0];
-        }
-
-        for (EasyQASite site : sites) {
-            if (site.getName() != null && site.getName().equals(siteName)) {
-                result = site;
-                break;
-            }
-        }
-        if (result != null) {
-            result.setPluginEnabled(pluginEnabled);
-            result.setFailureMode(failureMode);
-        }
-        return result;
     }
 }

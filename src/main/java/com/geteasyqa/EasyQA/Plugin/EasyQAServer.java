@@ -22,6 +22,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Created by yanagusti on 3/23/17.
+ */
+
+
+/**
  * This class contains methods for communication with a EasyQA server using the REST API.
  */
 public class EasyQAServer {

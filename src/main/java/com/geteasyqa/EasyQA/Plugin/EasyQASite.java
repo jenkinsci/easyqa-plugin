@@ -6,6 +6,9 @@ import hudson.model.AbstractProject;
 import hudson.model.Result;
 import org.kohsuke.stapler.DataBoundConstructor;
 
+/**
+ * Created by yanagusti on 3/23/17.
+ */
 public class EasyQASite {
     private String name;
     private String url;

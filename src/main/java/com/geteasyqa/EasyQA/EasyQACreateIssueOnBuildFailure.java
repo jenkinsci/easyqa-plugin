@@ -29,7 +29,10 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 /**
- * Post-build step to create an issue in Youtrack if the build fails.
+ * Created by yanagusti on 3/23/17.
+ */
+/**
+ * Post-build step to create an issue in EasyQA if the build fails.
  */
 public class EasyQACreateIssueOnBuildFailure extends Notifier {
     public static final String FAILURE = "failure";

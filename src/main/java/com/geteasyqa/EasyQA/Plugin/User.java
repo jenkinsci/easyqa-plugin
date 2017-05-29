@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Created by yanagusti on 3/23/17.
+ */
+
+/**
  * This object represents a user.
  */
 @NoArgsConstructor
@@ -26,34 +30,36 @@ public class User {
         return loggedIn;
     }
 
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
     public List<String> getCookies() {
         return cookies;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
     public String getEmail() {
         return email;
     }
-    public void setPassword(String password) {
-        this.password = password;
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setAuth_token(String auth_token) {
-        this.auth_token=auth_token;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getAuth_token() {
         return auth_token;
     }
 
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
+    public void setAuth_token(String auth_token) {
+        this.auth_token = auth_token;
     }
 
     public static class UserRefHandler extends DefaultHandler {
