@@ -12,7 +12,7 @@
 
 
   <groupId>com.geteasyqa</groupId>
-  <artifactId>easyqa-plugin</artifactId>
+  <artifactId>easyqa</artifactId>
   <version>1.0</version>
   <packaging>hpi</packaging>
 
